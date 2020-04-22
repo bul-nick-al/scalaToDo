@@ -3,7 +3,7 @@ package utils
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.configuration.Configuration
 
-trait MigrationService extends MainConfig {
+class MigrationService(config: Config) {
 
   private val flyway = Flyway
     .configure()

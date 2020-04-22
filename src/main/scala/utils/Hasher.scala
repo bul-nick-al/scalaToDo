@@ -1,7 +1,11 @@
 package utils
 
 trait Hasher {
-  def md5(s: String): String = {
+  def hash(s: String): String
+}
+
+class Md5Hasher extends Hasher {
+  override def hash(s: String): String = {
     import java.security.MessageDigest
     import java.math.BigInteger
     val md           = MessageDigest.getInstance("MD5")

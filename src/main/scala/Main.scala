@@ -8,14 +8,16 @@ import utils.{MainConfig, MigrationService}
 
 import scala.concurrent.ExecutionContext
 
-object Main extends App with MainConfig with MigrationService with Routes {
+object Main extends App with TodoServices {
 
   implicit val actors: ActorSystem                = ActorSystem()
   implicit val executionContext: ExecutionContext = actors.dispatcher
   protected val log: LoggingAdapter               = Logging(actors, getClass)
 
+  migrationService.reloadSchema()
+
   Http().bindAndHandle(
-    handler = logRequestResult("log")(routes),
+    handler = logRequestResult("log")(routeService.routes),
     interface = config.http.interface,
     port = config.http.port
   )

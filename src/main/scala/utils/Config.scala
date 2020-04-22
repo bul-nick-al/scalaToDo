@@ -25,7 +25,7 @@ case class Database(
     registerMbeans: Boolean
 )
 
-trait MainConfig {
+object MainConfig {
   val config: Config = ConfigSource.default.load[Config].getOrElse(backupConfig)
 
   val backupConfig: Config = Config(

@@ -1,79 +1,81 @@
 package quill
 
+import com.mysql.cj.protocol.ResultListener
 import models.{Id, Task, User}
 import utils.{DatabaseConfig, Hasher}
 
-object TasksQuill extends DatabaseConfig with Hasher {
+class TasksQuill(val dbConfig: DatabaseConfig, hasher: Hasher) {
 
-  import ctx._
+  import dbConfig.ctx
+  import dbConfig.ctx._
 
-  def findAll: List[Task] = ctx.run(quote {
+  def findAll: Result[List[Task]] = ctx.run(quote {
     query[Task]
   })
 
-  def findAllFor(user: User): List[Task] = ctx.run(quote {
+  def findAllFor(user: User): Result[List[Task]] = ctx.run(quote {
     query[Task].filter(_.userId == lift(user.id))
   })
 
-  def findById(taskId: Id): Option[Task] = ctx
+  def findById(taskId: Id): Result[Option[Task]] = ctx
     .run(quote {
       query[Task].filter(task => task.id == lift(taskId))
     })
-    .headOption
+    .map(_.headOption)
 
-  def findByIdFor(user: User, taskId: Id): Option[Task] = ctx
+  def findByIdFor(user: User, taskId: Id): Result[Option[Task]] = ctx
     .run(quote {
       query[Task].filter(task => task.id == lift(taskId) && task.userId == lift(user.id))
     })
-    .headOption
+    .map(_.headOption)
 
-  def create(task: Task): Id =
-    findUserById(task.userId) match {
+  def create(task: Task): Result[Id] =
+    findUserById(task.userId).flatMap {
       case Some(_) =>
         ctx.run(quote {
           query[Task].insert(lift(task)).returningGenerated(_.id)
         })
-      case None => 0L
+      case None => ctx.run(0L)
     }
 
-  def update(newTask: Task): Id = ctx.run(
+  def update(newTask: Task): Result[Id] = ctx.run(
     quote {
       query[Task].filter(_.id == lift(newTask.id)).update(lift(newTask))
     }
   )
 
-  def updateFor(user: User, newTask: Task): Id = ctx.run(quote {
+  def updateFor(user: User, newTask: Task): Result[Id] = ctx.run(quote {
     query[Task].filter(task => task.id == lift(newTask.id) && task.userId == lift(user.id)).update(lift(newTask))
   })
 
-  def delete(taskId: Id): Id = ctx.run(quote {
+  def delete(taskId: Id): Result[Id] = ctx.run(quote {
     query[Task].filter(_.id == lift(taskId)).delete
   })
 
-  def deleteFor(user: User, taskId: Id): Id = ctx.run(quote {
+  def deleteFor(user: User, taskId: Id): Result[Id] = ctx.run(quote {
     query[Task].filter(task => task.id == lift(taskId) && task.userId == lift(user.id)).delete
   })
 
-  def findByCredentials(login: String, password: String): Option[User] = ctx
+  def findByCredentials(login: String, password: String): Result[Option[User]] = ctx
     .run(quote {
-      query[User].filter(user => user.login == lift(login) && user.password == lift(md5(password)))
+      query[User].filter(user => user.login == lift(login) && user.password == lift(hasher.hash(password)))
     })
-    .headOption
+    .map(_.headOption)
 
-  def findUserById(userId: Id): Option[User] = ctx
+  def findUserById(userId: Id): Result[Option[User]] = ctx
     .run(quote {
       query[User].filter(user => user.id == lift(userId))
     })
-    .headOption
+    .map(_.headOption)
 
-  def findUserByLogin(login: String): Option[User] = ctx
+  def findUserByLogin(login: String): Result[Option[User]] = ctx
     .run(quote {
       query[User].filter(user => user.login == lift(login))
     })
-    .headOption
+    .map(_.headOption)
 
-  def create(user: User): Id =
+  def create(user: User): Result[Id] =
     ctx.run(quote {
-      query[User].insert(_.login -> lift(user.login), _.password -> lift(md5(user.password))).returningGenerated(_.id)
+      query[User].insert(_.login -> lift(user.login), _.password -> lift(hasher.hash(user.password))).returningGenerated(_.id)
     })
 }
