@@ -1,10 +1,9 @@
+package todo
+
 import akka.actor.ActorSystem
 import akka.event.{Logging, LoggingAdapter}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Directives.logRequestResult
-import models.{Task, User}
-import quill.TasksQuill
-import utils.{MainConfig, MigrationService}
 
 import scala.concurrent.ExecutionContext
 

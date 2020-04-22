@@ -1,13 +1,13 @@
-package api
+package todo.api
 
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Directives.{complete, concat, get, parameter, path}
-import utils.{Authenticator, TaskToJsonMapping}
-import quill.TasksQuill
+import todo.utils.{Authenticator, TaskToJsonMapping}
+import todo.quill.TasksQuill
 import spray.json._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import models.{Id, Task, User}
+import todo.models.{Id, Task, User}
 import monix.execution.Scheduler.Implicits.global
 
 import scala.util.{Failure, Success}
@@ -26,7 +26,7 @@ class TasksApi(authenticator: Authenticator, tasksQuill: TasksQuill,taskToJsonMa
                   case Some(task) => complete(task.toJson)
                   case None => complete(StatusCodes.NotFound -> "There is no task with such id")
                 }
-                case Failure(ex) => complete((StatusCodes.InternalServerError -> s"An error occurred: ${ex.getMessage}"))
+                case Failure(ex) => complete(StatusCodes.InternalServerError -> s"An error occurred: ${ex.getMessage}")
               }
             case None => complete(StatusCodes.BadRequest -> "Id must be a number")
           }

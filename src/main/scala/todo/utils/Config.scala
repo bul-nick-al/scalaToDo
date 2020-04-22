@@ -1,4 +1,4 @@
-package utils
+package todo.utils
 import pureconfig._
 import pureconfig.generic.auto._
 
@@ -28,7 +28,7 @@ case class Database(
 object MainConfig {
   val config: Config = ConfigSource.default.load[Config].getOrElse(backupConfig)
 
-  val backupConfig: Config = Config(
+  lazy val backupConfig: Config = Config(
     Http(
       interface = "0.0.0.0",
       port = 8086

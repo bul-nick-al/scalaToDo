@@ -1,8 +1,8 @@
-package quill
+package todo.quill
 
 import com.mysql.cj.protocol.ResultListener
-import models.{Id, Task, User}
-import utils.{DatabaseConfig, Hasher}
+import todo.models.{Id, Task, User}
+import todo.utils.{DatabaseConfig, Hasher}
 
 class TasksQuill(val dbConfig: DatabaseConfig, hasher: Hasher) {
 

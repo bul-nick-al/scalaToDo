@@ -1,9 +1,9 @@
-package utils
+package todo.utils
 
 import akka.http.scaladsl.server.directives.Credentials
-import models.User
+import todo.models.User
 import monix.execution.Scheduler
-import quill.TasksQuill
+import todo.quill.TasksQuill
 import scala.concurrent.Future
 
 trait Authenticator {

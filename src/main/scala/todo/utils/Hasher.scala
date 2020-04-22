@@ -1,4 +1,4 @@
-package utils
+package todo.utils
 
 trait Hasher {
   def hash(s: String): String

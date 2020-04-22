@@ -1,4 +1,4 @@
-package utils
+package todo.utils
 
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.configuration.Configuration
@@ -12,13 +12,13 @@ class MigrationService(config: Config) {
       config.database.user,
       config.database.password
     )
-    .load();
+    .load()
 
-  def migrate() = {
+  def migrate(): Int = {
     flyway.migrate()
   }
 
-  def reloadSchema() = {
+  def reloadSchema(): Int = {
     flyway.clean()
     flyway.migrate()
   }
