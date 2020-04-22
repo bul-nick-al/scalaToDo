@@ -18,14 +18,12 @@ object Main extends App with TodoServices {
 
   migrationService.reloadSchema()
 
-
-
   for {
-    binding <-  Http().bindAndHandle(
-      handler = logRequestResult("log")(routeService.routes),
-      interface = config.http.interface,
-      port = config.http.port
-    )
+    binding <- Http().bindAndHandle(
+                handler = logRequestResult("log")(routeService.routes),
+                interface = config.http.interface,
+                port = config.http.port
+              )
     _ = sys.addShutdownHook {
       for {
         _ <- binding.terminate(Duration(5, TimeUnit.SECONDS))
