@@ -3,7 +3,19 @@ package todo.quill
 import todo.models.{Id, User}
 import todo.utils.{DatabaseConfig, Hasher}
 
-class UserQuill(val dbConfig: DatabaseConfig, hasher: Hasher) {
+abstract class UserService(val dbConfig: DatabaseConfig) {
+  import dbConfig.ctx._
+
+  def findByCredentials(login: String, password: String): Result[Option[User]]
+
+  def findUserById(userId: Id): Result[Option[User]]
+
+  def findUserByLogin(login: String): Result[Option[User]]
+
+  def create(user: User): Result[Id]
+}
+
+class UserQuill(override val dbConfig: DatabaseConfig, hasher: Hasher) extends UserService(dbConfig) {
 
   import dbConfig.ctx
   import dbConfig.ctx._

@@ -1,19 +1,19 @@
 package todo
 
 import todo.api.TasksApi
-import todo.quill.{QuillService, TasksQuill, UserQuill}
+import todo.quill.{ModelService, TasksQuill, UserQuill}
 import todo.utils._
 
 trait TodoServices {
   val hasher                         = new Md5Hasher()
   val databaseConfig: DatabaseConfig = new DatabaseConfig {}
 
-  val quillService: QuillService = new QuillService {
-    override val tasksQuill: TasksQuill = new TasksQuill(databaseConfig, userQuill, hasher)
-    override lazy val userQuill: UserQuill =  new UserQuill(databaseConfig, hasher)
+  val quillService: ModelService = new ModelService {
+    override val tasks: TasksQuill = new TasksQuill(databaseConfig, user, hasher)
+    override lazy val user: UserQuill =  new UserQuill(databaseConfig, hasher)
   }
 
-  val authenticator                  = new QuillAuthenticator(quillService.userQuill, hasher)
+  val authenticator                  = new QuillAuthenticator(quillService.user, hasher)
   val mapping: TaskToJsonMapping     = new TaskToJsonMapping {}
 
   val taskApi      = new TasksApi(authenticator, quillService, mapping)

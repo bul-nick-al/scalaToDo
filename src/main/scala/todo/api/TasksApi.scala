@@ -3,7 +3,7 @@ package todo.api
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Directives.{complete, concat, get, parameter, path}
 import todo.utils.{Authenticator, TaskToJsonMapping}
-import todo.quill.{QuillService, TasksQuill}
+import todo.quill.{ModelService, TasksQuill}
 import spray.json._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
@@ -12,7 +12,7 @@ import monix.execution.Scheduler.Implicits.global
 
 import scala.util.{Failure, Success}
 
-class TasksApi(authenticator: Authenticator, qs: QuillService, taskToJsonMapping: TaskToJsonMapping) {
+class TasksApi(authenticator: Authenticator, qs: ModelService, taskToJsonMapping: TaskToJsonMapping) {
 
   import taskToJsonMapping._
   private val securedRoute = Route.seal {
@@ -21,7 +21,7 @@ class TasksApi(authenticator: Authenticator, qs: QuillService, taskToJsonMapping
         get {
           id match {
             case Some(value) =>
-              onComplete(qs.tasksQuill.findByIdFor(user, value).runToFuture) {
+              onComplete(qs.tasks.findByIdFor(user, value).runToFuture) {
                 case Success(taskOptional) =>
                   taskOptional match {
                     case Some(task) => complete(task.toJson)
@@ -36,14 +36,14 @@ class TasksApi(authenticator: Authenticator, qs: QuillService, taskToJsonMapping
     } ~
       (path("tasks") & get) {
         authenticateBasicAsync(realm = "secure site", authenticator.authenticate) { user =>
-          complete(qs.tasksQuill.findAllFor(user).map(_.toJson).runToFuture)
+          complete(qs.tasks.findAllFor(user).map(_.toJson).runToFuture)
         }
       } ~
       path("tasks") {
         post {
           authenticateBasicAsync(realm = "secure site", authenticator.authenticate) { user =>
             entity(as[Task]) { task =>
-              complete(qs.tasksQuill.create(task.withUser(user)).map(_.toJson).runToFuture)
+              complete(qs.tasks.create(task.withUser(user)).map(_.toJson).runToFuture)
             }
           }
         }
@@ -52,7 +52,7 @@ class TasksApi(authenticator: Authenticator, qs: QuillService, taskToJsonMapping
         put {
           authenticateBasicAsync(realm = "secure site", authenticator.authenticate) { user =>
             entity(as[Task]) { task =>
-              complete(qs.tasksQuill.update(task.withUser(user)).map(_.toJson).runToFuture)
+              complete(qs.tasks.update(task.withUser(user)).map(_.toJson).runToFuture)
             }
           }
         }
@@ -61,7 +61,7 @@ class TasksApi(authenticator: Authenticator, qs: QuillService, taskToJsonMapping
         delete {
           authenticateBasicAsync(realm = "secure site", authenticator.authenticate) { user =>
             id match {
-              case Some(id) => complete(qs.tasksQuill.deleteFor(user, id).map(_.toJson).runToFuture)
+              case Some(id) => complete(qs.tasks.deleteFor(user, id).map(_.toJson).runToFuture)
               case None     => complete(StatusCodes.BadRequest -> "Id must be a number")
             }
           }
@@ -73,7 +73,7 @@ class TasksApi(authenticator: Authenticator, qs: QuillService, taskToJsonMapping
     path("register") {
       post {
         entity(as[User]) { user =>
-          complete(qs.userQuill.create(user).map(_.toJson).runToFuture)
+          complete(qs.user.create(user).map(_.toJson).runToFuture)
         }
       }
     }

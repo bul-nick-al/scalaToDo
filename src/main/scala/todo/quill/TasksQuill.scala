@@ -4,7 +4,30 @@ import com.mysql.cj.protocol.ResultListener
 import todo.models.{Id, Task, User}
 import todo.utils.{DatabaseConfig, Hasher}
 
-class TasksQuill(val dbConfig: DatabaseConfig, userQuill: UserQuill, hasher: Hasher) {
+abstract class TasksService(val dbConfig: DatabaseConfig) {
+  import dbConfig.ctx._
+
+  def findAll: Result[List[Task]]
+
+
+  def findAllFor(user: User): Result[List[Task]]
+
+  def findById(taskId: Id): Result[Option[Task]]
+
+  def findByIdFor(user: User, taskId: Id): Result[Option[Task]]
+
+  def create(task: Task): Result[Id]
+
+  def update(newTask: Task): Result[Id]
+
+  def updateFor(user: User, newTask: Task): Result[Id]
+
+  def delete(taskId: Id): Result[Id]
+
+  def deleteFor(user: User, taskId: Id): Result[Id]
+}
+
+class TasksQuill(override val dbConfig: DatabaseConfig, userQuill: UserQuill, hasher: Hasher) extends TasksService(dbConfig){
 
   import dbConfig.ctx
   import dbConfig.ctx._
