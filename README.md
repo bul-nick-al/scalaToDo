@@ -27,7 +27,7 @@ $ docker-compose up
 
 Next use sbt to launch the project 
 ```
-$ run
+$ sbt run
 ```
 
 #### Functionality 
