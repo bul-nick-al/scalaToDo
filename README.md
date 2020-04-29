@@ -96,7 +96,7 @@ $ docker-compose up
 
 There are two databases: 
 
-1. The regular database, that will be empty at the start and will be perserved if you shout the server down as long as the docker container is running
+1. The regular database, that will be empty at the start and will be perserved if you shut the server down as long as the docker container is running
 2. The test database that is populated when deployed with dummy data.
 
 If you want to use another port for either of them or change other setting for db access, do so in `application.conf`
