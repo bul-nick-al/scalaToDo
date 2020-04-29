@@ -51,10 +51,10 @@ with Basic Authentication and body
 POST http://localhost:8086/api/tasks
 with Basic Authentication and body 
 {
-"id":-1, // does not matter
+"id":-1, # does not matter
 "title": "Eat potatoes",
 "description": "It is important to eat potatoes",
-"userId": -1, // does not matter
+"userId": -1, # does not matter
 "completed": false
 }
 
@@ -64,7 +64,7 @@ with Basic Authentication
 PUT http://localhost:8086/api/tasks
 with Basic Authentication and body
 {
-"id":3, //here id matters
+"id":3, # here id matters
 "title": "Eat potatoes",
 "description": "It is pivotal to eat potatoes",
 "userId": -1,
