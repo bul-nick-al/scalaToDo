@@ -8,6 +8,6 @@ class HasherSpec extends AnyFlatSpec with Matchers {
   val hasher = new Md5Hasher()
 
   "the md5 hasher" should "produce an md5 hash of a string" in {
-    hasher.hash("123") shouldEqual "5f4dcc3b5aa765d61d8327deb882cf99"
+    hasher.hash("123") shouldEqual "202cb962ac59075b964b07152d234b70"
   }
 }

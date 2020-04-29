@@ -5,7 +5,7 @@ import todo.models._
 
 package object mock {
   val user1: User = User(1, "kek1", "chebrek1")
-  val user2: User = User(2, "kek2", "chebrek2")
+  val user2: User = User(20, "kek2", "chebrek2")
   val user3: User = User(3, "kek3", "chebrek3")
   val user4: User = User(4, "kek4", "chebrek4")
 
