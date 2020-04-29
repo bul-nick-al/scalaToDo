@@ -22,13 +22,13 @@ case class Database(
 )
 
 case class DataSource(
-                       url: String,
-                       user: String,
-                       password: String,
-                         cachePrepStmts: Boolean,
-                         prepStmtCacheSize: Int,
-                         prepStmtCacheSqlLimit: Int
-                     )
+    url: String,
+    user: String,
+    password: String,
+    cachePrepStmts: Boolean,
+    prepStmtCacheSize: Int,
+    prepStmtCacheSqlLimit: Int
+)
 
 object MainConfig {
   implicit def hint[T] = ProductHint[T](ConfigFieldMapping(CamelCase, CamelCase))
@@ -42,8 +42,9 @@ object MainConfig {
     ),
     Database(
       dataSourceClassName = "com.mysql.cj.jdbc.MysqlDataSource",
-       DataSource(
-        url = "jdbc:mysql://localhost:3306/todo?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow",
+      DataSource(
+        url =
+          "jdbc:mysql://localhost:3306/todo?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow",
         user = "root",
         password = "",
         cachePrepStmts = true,

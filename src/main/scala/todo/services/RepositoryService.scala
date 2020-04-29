@@ -1,6 +1,6 @@
 package todo.services
 
-trait ModelService {
+trait RepositoryService {
   val tasks: TasksService
   val user: UserService
 }

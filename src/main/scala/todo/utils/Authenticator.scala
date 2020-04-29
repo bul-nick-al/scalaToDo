@@ -9,5 +9,3 @@ import scala.concurrent.Future
 trait Authenticator {
   def authenticate(credentials: Credentials)(implicit sc: Scheduler): Future[Option[User]]
 }
-
-

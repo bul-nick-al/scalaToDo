@@ -1,27 +1,20 @@
 package todo.mock
 
 import todo.models.{Id, Task, User}
-import todo.services.{ModelService, TasksService, UserService}
+import todo.services.{RepositoryService, TasksService, UserService}
 
 import scala.concurrent.Future
 
-class ModelServiceMockSuccessful extends ModelService {
+class RepositoryServiceMockSuccessful extends RepositoryService {
   override val tasks: TasksService = new TasksService {
-    override def findAll: Future[List[Task]] = Future.successful(listOfTasks)
 
     override def findAllFor(user: User): Future[List[Task]] = Future.successful(listOfTasks)
-
-    override def findById(taskId: Id): Future[Option[Task]] = Future.successful(Some(task1))
 
     override def findByIdFor(user: User, taskId: Id): Future[Option[Task]] = Future.successful(Some(task2))
 
     override def create(task: Task): Future[Id] = Future.successful(1)
 
     override def update(newTask: Task): Future[Id] = Future.successful(2)
-
-    override def updateFor(user: User, newTask: Task): Future[Id] = Future.successful(3)
-
-    override def delete(taskId: Id): Future[Id] = Future.successful(4)
 
     override def deleteFor(user: User, taskId: Id): Future[Id] = Future.successful(5)
 
@@ -42,25 +35,18 @@ class ModelServiceMockSuccessful extends ModelService {
   }
 }
 
-class ModelServiceMockUnsuccessful extends ModelService {
+class RepositoryServiceMockUnsuccessful extends RepositoryService {
   override val tasks: TasksService = new TasksService {
-    override def findAll: Future[List[Task]] = Future.successful(List())
 
     override def findAllFor(user: User, completed: Boolean): Future[List[Task]] = Future.successful(List())
 
     override def findAllFor(user: User): Future[List[Task]] = Future.successful(List())
-
-    override def findById(taskId: Id): Future[Option[Task]] = Future.successful(None)
 
     override def findByIdFor(user: User, taskId: Id): Future[Option[Task]] = Future.successful(None)
 
     override def create(task: Task): Future[Id] = Future.successful(0)
 
     override def update(newTask: Task): Future[Id] = Future.successful(0)
-
-    override def updateFor(user: User, newTask: Task): Future[Id] = Future.successful(0)
-
-    override def delete(taskId: Id): Future[Id] = Future.successful(0)
 
     override def deleteFor(user: User, taskId: Id): Future[Id] = Future.successful(0)
   }

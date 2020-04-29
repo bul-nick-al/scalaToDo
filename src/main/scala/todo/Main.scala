@@ -17,7 +17,7 @@ object Main extends App with TodoServices {
   implicit val executionContext: ExecutionContext = actors.dispatcher
   protected val log: LoggingAdapter               = Logging(actors, getClass)
 
-  migrationService.reloadSchema()
+  migrationService.migrate()
 
   for {
     binding <- Http().bindAndHandle(

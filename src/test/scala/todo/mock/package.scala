@@ -9,6 +9,8 @@ package object mock {
   val user3: User = User(3, "kek3", "chebrek3")
   val user4: User = User(4, "kek4", "chebrek4")
 
+  val dbUser: User = User(1, "nick", "202cb962ac59075b964b07152d234b70")
+
   val listOfUsers = List(user1, user2, user3, user4)
 
   val task1: Task = Task(1, "task1", "do task 1", 1, completed = false)

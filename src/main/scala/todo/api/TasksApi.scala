@@ -9,11 +9,11 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import todo.models.{Id, Task, User}
 import monix.execution.Scheduler.Implicits.global
-import todo.services.ModelService
+import todo.services.RepositoryService
 
 import scala.util.{Failure, Success}
 
-class TasksApi(authenticator: Authenticator, qs: ModelService, taskToJsonMapping: TaskToJsonMapping) {
+class TasksApi(authenticator: Authenticator, qs: RepositoryService, taskToJsonMapping: TaskToJsonMapping) {
 
   import taskToJsonMapping._
 
@@ -40,7 +40,7 @@ class TasksApi(authenticator: Authenticator, qs: ModelService, taskToJsonMapping
         authenticateBasicAsync(realm = "secure site", authenticator.authenticate) { user =>
           completed match {
             case Some(completed) => complete(qs.tasks.findAllFor(user, completed).map(_.toJson))
-            case None => complete(qs.tasks.findAllFor(user).map(_.toJson))
+            case None            => complete(qs.tasks.findAllFor(user).map(_.toJson))
           }
         }
       } ~

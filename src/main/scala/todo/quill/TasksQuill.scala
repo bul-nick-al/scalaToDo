@@ -13,23 +13,16 @@ class TasksQuill(val dbConfig: DatabaseConfig, userQuill: UserQuill, hasher: Has
   import dbConfig.ctx
   import dbConfig.ctx._
 
-  def findAll: Future[List[Task]] = ctx.run(quote {
-    query[Task]
-  }).runToFuture
-
-  def findAllFor(user: User): Future[List[Task]] = ctx.run(quote {
-    query[Task].filter(_.userId == lift(user.id))
-  }).runToFuture
-
-  def findAllFor(user: User, completed: Boolean): Future[List[Task]] = ctx.run(quote {
-    query[Task].filter( task => task.userId == lift(user.id) && task.completed == lift(completed))
-  }).runToFuture
-
-  def findById(taskId: Id): Future[Option[Task]] = ctx
+  def findAllFor(user: User): Future[List[Task]] = ctx
     .run(quote {
-      query[Task].filter(task => task.id == lift(taskId))
+      query[Task].filter(_.userId == lift(user.id))
     })
-    .map(_.headOption)
+    .runToFuture
+
+  def findAllFor(user: User, completed: Boolean): Future[List[Task]] = ctx
+    .run(quote {
+      query[Task].filter(task => task.userId == lift(user.id) && task.completed == lift(completed))
+    })
     .runToFuture
 
   def findByIdFor(user: User, taskId: Id): Future[Option[Task]] = ctx
@@ -42,28 +35,26 @@ class TasksQuill(val dbConfig: DatabaseConfig, userQuill: UserQuill, hasher: Has
   def create(task: Task): Future[Id] =
     userQuill.findUserById(task.userId).flatMap {
       case Some(_) =>
-        ctx.run(quote {
-          query[Task].insert(lift(task)).returningGenerated(_.id)
-        }).runToFuture
+        ctx
+          .run(quote {
+            query[Task].insert(lift(task)).returningGenerated(_.id)
+          })
+          .runToFuture
       case None => ctx.run(0L).runToFuture
     }
 
-  def update(newTask: Task): Future[Id] = ctx.run(
-    quote {
-      query[Task].filter(_.id == lift(newTask.id)).update(lift(newTask))
-    }
-  ).runToFuture
+  def update(newTask: Task): Future[Id] = ctx
+    .run(
+      quote {
+        query[Task].filter(_.id == lift(newTask.id)).update(lift(newTask))
+      }
+    )
+    .runToFuture
 
-  def updateFor(user: User, newTask: Task): Future[Id] = ctx.run(quote {
-    query[Task].filter(task => task.id == lift(newTask.id) && task.userId == lift(user.id)).update(lift(newTask))
-  }).runToFuture
-
-  def delete(taskId: Id): Future[Id] = ctx.run(quote {
-    query[Task].filter(_.id == lift(taskId)).delete
-  }).runToFuture
-
-  def deleteFor(user: User, taskId: Id): Future[Id] = ctx.run(quote {
-    query[Task].filter(task => task.id == lift(taskId) && task.userId == lift(user.id)).delete
-  }).runToFuture
+  def deleteFor(user: User, taskId: Id): Future[Id] = ctx
+    .run(quote {
+      query[Task].filter(task => task.id == lift(taskId) && task.userId == lift(user.id)).delete
+    })
+    .runToFuture
 
 }

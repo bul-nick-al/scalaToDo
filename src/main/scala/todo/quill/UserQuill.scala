@@ -34,9 +34,11 @@ class UserQuill(val dbConfig: DatabaseConfig, hasher: Hasher) extends UserServic
     .runToFuture
 
   def create(user: User): Future[Id] =
-    ctx.run(quote {
-      query[User]
-        .insert(_.login -> lift(user.login), _.password -> lift(hasher.hash(user.password)))
-        .returningGenerated(_.id)
-    }).runToFuture
+    ctx
+      .run(quote {
+        query[User]
+          .insert(_.login -> lift(user.login), _.password -> lift(hasher.hash(user.password)))
+          .returningGenerated(_.id)
+      })
+      .runToFuture
 }

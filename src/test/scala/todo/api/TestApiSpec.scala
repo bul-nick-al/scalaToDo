@@ -9,15 +9,15 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import spray.json._
 import todo.mock
-import todo.mock.{AuthenticatorMock, ModelServiceMockSuccessful, ModelServiceMockUnsuccessful}
+import todo.mock.{AuthenticatorMock, RepositoryServiceMockSuccessful, RepositoryServiceMockUnsuccessful}
 import todo.utils.TaskToJsonMapping
 
 class TestApiSpec extends AnyWordSpec with Matchers with ScalatestRouteTest with ScalaFutures with TaskToJsonMapping{
 
   val taskToJsonMapping: TaskToJsonMapping = new TaskToJsonMapping {}
 
-  val modelServiceSuccessful = new ModelServiceMockSuccessful()
-  val modelServiceUnSuccessful = new ModelServiceMockUnsuccessful()
+  val modelServiceSuccessful = new RepositoryServiceMockSuccessful()
+  val modelServiceUnSuccessful = new RepositoryServiceMockUnsuccessful()
   val validCredentials: BasicHttpCredentials = BasicHttpCredentials("login", "password")
   val invalidCredentials: BasicHttpCredentials = BasicHttpCredentials("lol", "kek")
   val api: TasksApi = new TasksApi(
