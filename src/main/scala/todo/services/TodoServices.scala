@@ -1,7 +1,8 @@
-package todo
+package todo.services
 
+import todo.Routes
 import todo.api.TasksApi
-import todo.quill.{ModelService, TasksQuill, UserQuill}
+import todo.quill.{QuillAuthenticator, TasksQuill, UserQuill}
 import todo.utils._
 
 trait TodoServices {

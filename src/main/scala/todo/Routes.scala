@@ -5,7 +5,7 @@ import akka.http.scaladsl.server.Route
 import todo.api.TasksApi
 
 class Routes(api: TasksApi) {
-  val routes: Route = pathPrefix("todo/api") {
+  val routes: Route = pathPrefix("api") {
     api.tasksApi
   }
 }

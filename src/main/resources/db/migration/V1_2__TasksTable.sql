@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `task`(
   `title` VARCHAR(200) NOT NULL,
   `description` VARCHAR(300) NOT NULL,
   `user_id` BIGINT(20) NOT NULL,
+  `completed` BOOLEAN NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE = InnoDB;
 

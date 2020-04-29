@@ -11,11 +11,13 @@ libraryDependencies ++= Seq(
   "com.lightbend.akka" %% "akka-stream-alpakka-csv" % "1.1.2",
   "com.github.pureconfig" %% "pureconfig" % "0.12.3",
   "mysql" % "mysql-connector-java" % "8.0.17",
-  "io.getquill" %% "todo.quill-jdbc" % "3.5.1",
-  "io.getquill" %% "todo.quill-jdbc-monix" % "3.5.1",
+  "io.getquill" %% "quill-jdbc" % "3.5.1",
+  "io.getquill" %% "quill-jdbc-monix" % "3.5.1",
   "org.flywaydb" % "flyway-core" % "6.3.2",
   "io.spray" %%  "spray-json" % "1.3.5",
   "org.scalatest" %% "scalatest" % "3.1.0" % Test,
+  "com.typesafe.akka" %% "akka-stream-testkit" % "2.6.3" % Test,
+  "com.typesafe.akka" %% "akka-http-testkit" % "10.1.11" % Test
 )
 
 enablePlugins(JavaAppPackaging)

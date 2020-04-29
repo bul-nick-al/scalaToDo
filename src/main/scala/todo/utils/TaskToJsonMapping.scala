@@ -6,7 +6,7 @@ import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import todo.models.{Task, User}
 
 trait TaskToJsonMapping extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit def taskToJson: RootJsonFormat[Task] = jsonFormat4(Task)
+  implicit def taskToJson: RootJsonFormat[Task] = jsonFormat5(Task)
 
   implicit def userToJson: RootJsonFormat[User] = jsonFormat3(User)
 

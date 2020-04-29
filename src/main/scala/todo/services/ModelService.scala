@@ -1,4 +1,4 @@
-package todo.quill
+package todo.services
 
 trait ModelService {
   val tasks: TasksService

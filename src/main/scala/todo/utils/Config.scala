@@ -15,15 +15,19 @@ case class Http(
 )
 
 case class Database(
-    url: String,
-    driver: String,
-    user: String,
-    password: String,
-    numThreads: Int,
-    maxConnections: Int,
-    minConnections: Int,
-    registerMbeans: Boolean
+    dataSourceClassName: String,
+    dataSource: DataSource,
+    connectionTimeout: Int
 )
+
+case class DataSource(
+                       url: String,
+                       user: String,
+                       password: String,
+                         cachePrepStmts: Boolean,
+                         prepStmtCacheSize: Int,
+                         prepStmtCacheSqlLimit: Int
+                     )
 
 object MainConfig {
   val config: Config = ConfigSource.default.load[Config].getOrElse(backupConfig)
@@ -34,14 +38,16 @@ object MainConfig {
       port = 8086
     ),
     Database(
-      url = "jdbc:mysql://localhost:3306/akka_react?useUnicode=true&characterEncoding=UTF-8",
-      driver = "com.mysql.jdbc.Driver",
-      user = "root",
-      password = "",
-      numThreads = 1,
-      maxConnections = 2,
-      minConnections = 1,
-      registerMbeans = true
+      dataSourceClassName = "com.mysql.cj.jdbc.MysqlDataSource",
+       DataSource(
+        url = "jdbc:mysql://localhost:3306/todo?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Moscow",
+        user = "root",
+        password = "",
+        cachePrepStmts = true,
+        prepStmtCacheSize = 250,
+        prepStmtCacheSqlLimit = 2048
+      ),
+      connectionTimeout = 3000
     )
   )
 }
