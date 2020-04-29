@@ -2,7 +2,7 @@
 ### ToDo List app with Scala Akka HTTP API  and Quill
 
   
-  This a course project implemented in scala, which implements backend logic of a Todo list. One can create a user and use the credantials later to add, edit and delete tasks as well as mark them as completed or not completed
+  This is a course project implemented in scala, which implements backend logic of a Todo list. One can create a user and use the credantials later to add, edit and delete tasks as well as mark them as completed or not completed
 
 ### How to run
 
