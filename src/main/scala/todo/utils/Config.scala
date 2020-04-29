@@ -32,7 +32,6 @@ case class DataSource(
 
 object MainConfig {
   implicit def hint[T] = ProductHint[T](ConfigFieldMapping(CamelCase, CamelCase))
-  print(ConfigSource.default.load[Config])
   val config: Config = ConfigSource.default.load[Config].getOrElse(backupConfig)
 
   lazy val backupConfig: Config = Config(
